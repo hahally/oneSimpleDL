@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+# BERT的五种Pooling方法
 class MeanPooling(nn.Module):
     def __init__(self):
         super(MeanPooling, self).__init__()
