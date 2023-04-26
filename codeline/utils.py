@@ -1,4 +1,18 @@
 from nltk.text import TextCollection
+import numpy as np
+import torch
+import ramdom
+
+def set_seed(seed=42):
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    random.seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed(seed)
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+
+# set_seed(42)
 
 # 读取文件
 def read_file(file):
