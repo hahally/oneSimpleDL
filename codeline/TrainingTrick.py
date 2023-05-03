@@ -1,4 +1,20 @@
 import torch
+import torch.nn as nn
+
+def apply_swa(model: nn.Module,
+              checkpoint_list: list,
+              weight_list: list,
+              strict: bool = True):
+    checkpoint_tensor_list = [torch.load(f, map_location='cpu') for f in checkpoint_list]
+    for name, param in model.named_parameters():
+        try:
+            param.data = sum([ckpt['model'][name] * w for ckpt, w in zip(checkpoint_tensor_list, weight_list)])
+        except KeyError:
+            if strict:
+                raise KeyError(f"Can't match '{name}' from checkpoint")
+            else:
+                print(f"Can't match '{name}' from checkpoint")
+    return model
 
 class EMA():
     def __init__(self, model, decay):
